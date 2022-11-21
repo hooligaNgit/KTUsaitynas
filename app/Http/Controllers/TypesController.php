@@ -50,7 +50,7 @@ class TypesController extends Controller
      */
     public function show(Type $type)
     {
-        //
+        return new TypesResource($type);
     }
 
     /**
@@ -61,7 +61,7 @@ class TypesController extends Controller
      */
     public function edit(Type $type)
     {
-        //
+
     }
 
     /**

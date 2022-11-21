@@ -13,7 +13,7 @@ class Type extends Model
 
     protected $fillable = ['name'];
 
-    public function type(){
+    public function gifts(){
         return $this->hasMany(Gift::class);
     }
 }

@@ -22,3 +22,6 @@ Route::get('/gifts/create', function () {
 });
 
 Route::get('/gifts', [App\Http\Controllers\GiftsController::class, 'view']);
+Route::get('/login', [App\Http\Controllers\LoginController::class, 'index']);
+Route::get('/register', [App\Http\Controllers\LoginController::class, 'register']);
+

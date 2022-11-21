@@ -1,4 +1,4 @@
-<!<!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -57,7 +57,7 @@
     </div>
 </div>
 <script>
-    var items=({!! json_encode($item) !!});
+    var items=({!! json_encode($data) !!});
 </script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>

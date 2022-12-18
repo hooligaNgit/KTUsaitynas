@@ -9,33 +9,43 @@
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600' rel='stylesheet'
           type='text/css'>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{{ url('/css/style.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/table.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/form.css') }}"/>
 </head>
 <body>
-<div class="alert-success hidden">
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    Success
-</div>
-<div class="alert-warning hidden">
-    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    Warning
-</div>
-{{--@include('flash-message')--}}
-<div class="main-block">
-    <form action="#">
-        <div class="info">
-            <input type="text" name="name" class="name" placeholder="Name">
-            <input type="text" name="name" class="units_owned" placeholder="Units Owned">
-            <input type="text" name="name" class="unit_price" placeholder="Unit Price">
-            <select>
-                <option value="number" disabled selected>Gift Type</option>
-                <option value="4" class="type_id">4</option>
-            </select>
-        </div>
+<x-navigation>
+
+</x-navigation>
+@include('flash-message')
+<section>
+    <form class="form-style-9" action="{{ route('storeGift') }}" method="post">
+        @csrf
+        <ul>
+            <li>
+                <input type="text" name="name" class="field-style field-full align-none" placeholder="Name" required/>
+            </li>
+            <li>
+                <input type="number" step="0.01" name="unit_price" class="field-style field-split align-left" placeholder="Unit Price" required/>
+                <input type="number" name="units_owned" class="field-style field-split align-right" placeholder="Units Owned" required/>
+            </li>
+            <li>
+                <select id="type_id" name="type_id" class="field-style field-full align-none">
+                    @foreach($data as $type)
+                    <option value={{$type["id"]}}>{{$type["attributes"]["name"]}}</option>
+                    @endforeach
+                </select>
+            </li>
+            <li>
+                <input type="submit" value="Create Gift" />
+                <a href="/gifts">
+                    <input type="button" value="Return Back"/>
+                </a>
+            </li>
+        </ul>
     </form>
-    <button class="btn btn-info" id="belekas">Submit</button>
-</div>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+</section>
+<x-footer>
+
+</x-footer>
 </body>
 </html>

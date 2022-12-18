@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UsersResource;
+use App\Models\UserBox;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Validator;
 class UserController extends Controller
 {
@@ -58,10 +61,41 @@ class UserController extends Controller
         }
     }
 
+    public function view()
+    {
+        $user_id = Auth::user()->id;
+        $url = "http://127.0.0.1:8000/api/users/" .+ $user_id;
+        $response = Http::get($url);
+
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('subscriptions.index',['data' =>$data]);
+    }
+    public function apply(Request $request)
+    {
+        $box = new UserBox();
+        $box -> user_id = Auth::user()->id;
+        $box -> box_id = $request -> id;
+        $box -> save();
+        return back()->with('success', 'Data has been added');
+    }
+    public static function hasApplied($id)
+    {
+        $user = Auth::user()->id;
+        $hasApplied = UserBox::where([['user_id', $user],['box_id', $id]])->exists();
+        return $hasApplied;
+    }
+    public function cancel(Request $request)
+    {
+        $gift = UserBox::where([["box_id", $request->id],["user_id",Auth::user()->id]])->limit(1)->delete();
+        $url = '/subscriptions';
+        return redirect($url);
+    }
 
     public function index()
     {
-        return User::all();
+        return UsersResource::collection(User::all());
     }
 
     /**
@@ -91,9 +125,9 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(user $user)
     {
-        //
+        return new UsersResource($user);
     }
 
     /**

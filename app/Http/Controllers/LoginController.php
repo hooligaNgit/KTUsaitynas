@@ -27,9 +27,14 @@ class LoginController extends Controller
         return view('register');
     }
 
-    public function logout(Request $request){
+    public function logoutOauth(Request $request){
        $token = $request->user()->token();
        $token->revoke();
        return response('Logged out', 200);
+    }
+
+    public function logout(Request $request) {
+        Auth::logout();
+        return redirect('/login');
     }
 }

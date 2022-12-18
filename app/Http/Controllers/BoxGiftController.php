@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreBoxGiftRequest;
 use App\Http\Requests\UpdateBoxGiftRequest;
 use App\Models\BoxGift;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BoxGiftController extends Controller
 {
@@ -13,19 +15,47 @@ class BoxGiftController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function view(Request $request)
     {
-        //
+        $url = 'http://127.0.0.1:8000/api/boxes/' .+ $request->id;
+        $response = Http::get($url);
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('boxGift.index',['data' =>$data]);
     }
 
+    public function save(Request $request)
+    {
+        $box = new BoxGift();
+        $box -> gift_id = $request -> name;
+        $box -> box_id = $request -> id;
+        $box -> save();
+        return back()->with('success', 'Data has been added');
+    }
+
+    public function delete($gift_id, $box_id)
+    {
+        $gift = BoxGift::where([["gift_id", $gift_id],["box_id",$box_id]])->limit(1)->delete();
+        $url = 'boxes/boxGifts/'.+$box_id;
+        return redirect($url);
+    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        //
+        $url = 'http://127.0.0.1:8000/api/boxes/' .+ $request->id;
+        $response = Http::get("http://127.0.0.1:8000/api/gifts");
+        $responseBox = Http::get($url);
+
+        if ($response->successful() and $responseBox->successful()){
+            $data = $response->json()["data"];
+            $dataBox = $responseBox->json()["data"];
+        }
+        return view('boxgift.create',['data' =>$data, 'dataBox' => $dataBox]);
     }
 
     /**

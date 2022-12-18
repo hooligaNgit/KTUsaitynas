@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +27,17 @@ class box extends Model
             'id',
             'id',
             'gift_id'
+        );
+    }
+    public function user()
+    {
+        return $this->hasManyThrough(
+            '\App\Models\User',
+            '\App\Models\UserBox',
+            'box_id',
+            'id',
+            'id',
+            'user_id'
         );
     }
 }

@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\User;
 use App\Models\box;
+use App\Models\Role;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class BoxPolicy
@@ -16,21 +17,21 @@ class BoxPolicy
      * @param  \App\Models\User  $user
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function viewAny(User $user)
+    public function viewClient(User $user)
     {
-        //
+        return $user->role_id == Role::IS_CLIENT;
     }
 
     /**
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\box  $box
+     * @param  \App\Models\Advert  $advert
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, box $box)
+    public function view(User $user)
     {
-        //
+        return $user->role_id == Role::IS_ADMIN;
     }
 
     /**
@@ -48,10 +49,10 @@ class BoxPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\box  $box
+     * @param  \App\Models\Advert  $advert
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, box $box)
+    public function update(User $user, Advert $advert)
     {
         //
     }
@@ -60,10 +61,10 @@ class BoxPolicy
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\box  $box
+     * @param  \App\Models\Advert  $advert
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, box $box)
+    public function delete(User $user, Advert $advert)
     {
         //
     }
@@ -72,10 +73,10 @@ class BoxPolicy
      * Determine whether the user can restore the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\box  $box
+     * @param  \App\Models\Advert  $advert
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function restore(User $user, box $box)
+    public function restore(User $user, Advert $advert)
     {
         //
     }
@@ -84,10 +85,10 @@ class BoxPolicy
      * Determine whether the user can permanently delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\box  $box
+     * @param  \App\Models\Advert  $advert
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function forceDelete(User $user, box $box)
+    public function forceDelete(User $user, Advert $advert)
     {
         //
     }

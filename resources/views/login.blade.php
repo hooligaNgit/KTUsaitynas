@@ -7,11 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Login</title>
     <link rel="stylesheet" type="text/css" href="{{ url('/css/login.css') }}"/>
-    <link rel="stylesheet" type="text/css" href="{{ url('/js/login.js') }}"/>
+    <script type="text/javascript" src="{{ URL::asset('js/login.js') }}"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
-<form class="space-y-4 md:space-y-6" action="{{route('apiLogin')}}" method="post">
-    @csrf
 <div class="page">
     <div class="container">
         <div class="left">
@@ -50,11 +49,10 @@
                 <input type="email" id="email" name="email">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password">
-                <input type="submit" id="submit" value="Submit">
+                <button onclick="loginApi()">Login</button>
             </div>
         </div>
     </div>
 </div>
-</form>
 </body>
 </html>

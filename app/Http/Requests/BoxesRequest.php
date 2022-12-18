@@ -24,7 +24,7 @@ class BoxesRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'=>'required|unique:boxes',
+            'name'=>'required',
             'status'=>'required',
             'dispatch_date'=>'required',
             'delivery_date'=>'required'

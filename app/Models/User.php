@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function box()
+    {
+        return $this->hasManyThrough(
+            '\App\Models\Box',
+            '\App\Models\UserBox',
+            'user_id',
+            'id',
+            'id',
+            'box_id'
+        );
+    }
 }

@@ -9,4 +9,5 @@ class BoxGift extends Model
 {
     use HasFactory;
     protected $table = 'box_gift';
+    public $timestamps = false;
 }

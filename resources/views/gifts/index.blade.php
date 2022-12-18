@@ -5,61 +5,65 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/table.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/button.css') }}"/>
+    <link rel="stylesheet" type="text/css" href="{{ url('/css/createbutton.css') }}"/>
     <title>View Queries</title>
-    @vite('resources/css/app.css')
 </head>
 <body>
-<div class="overflow-x-auto relative shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left dark:text-black">
-        <thead class="text-xs uppercase dark:bg-gray-600 dark:text-white">
-        <tr>
-            <th scope="col" class="py-3 px-6 text-center text-2xl">
-                Gift Name
-            </th>
-            <th scope="col" class="py-3 px-6 text-center text-2xl">
-                Unit price
-            </th>
-            <th scope="col" class="py-3 px-6 text-center text-2xl">
-                Units owned
-            </th>
-            <th scope="col" class="py-3 px-6 text-center text-2xl">
-                Actions
-            </th>
-        </tr>
-        </thead>
-        <tbody>
-        @foreach($data as $item)
-            <tr class="bg-white border-b dark:bg-gray-300 dark:border-gray-600 dark:hover:bg-gray-100">
-                <th scope="row"
-                    class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-black text-center">
-                    {{$item->name}}
-                </th>
-                <td class="py-4 px-6 text-center">
-                    €{{$item->unit_price}}
-                </td>
-                <td class="py-4 px-6 text-center">
-                    {{$item->units_owned}}
-                </td>
-                <td class="py-4 px-6 text-center">
-                    <x-button>
-                        <a class="btn btn--delete">Delete</a>
-                    </x-button>
-                    <x-button>
-                        <a href="gifts/edit/{{$item->id}}" class="btn btn-primary btn-xs">Edit</a>
-                    </x-button>
-                </td>
+<x-navigation>
+
+</x-navigation>
+<section>
+    <a href="gifts/create">
+    <button class="button-27" role="button">Create Gift</button>
+    </a>
+    <div class="tbl-header">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Unit Price</th>
+                <th>Units Owned</th>
+                <th>Type</th>
+                <th>Actions</th>
             </tr>
-        @endforeach
-        </tbody>
-    </table>
-    <div class="mt-4">
-        {{$data->links()}}
+            </thead>
+        </table>
     </div>
-</div>
-<script>
-    var items=({!! json_encode($data) !!});
-</script>
-<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
-<script type="text/javascript" src="{{ URL::asset('js/app.js') }}"></script>
+    <div class="tbl-content">
+        <table cellpadding="0" cellspacing="0" border="0">
+            <tbody>
+            @foreach($dataTypes as $type)
+                @for ($i = 0; $i < sizeof($data); $i++)
+                    @if($type["id"] == $data[$i]["attributes"]["type_id"])
+                    <tr>
+                    <td>{{$data[$i]["attributes"]["name"]}}</td>
+                    <td>{{$data[$i]["attributes"]["unit_price"]}}€</td>
+                    <td>{{$data[$i]["attributes"]["units_owned"]}}</td>
+                    <td>{{$type["attributes"]["name"]}}</td>
+                    <td>
+                        <div>
+                            <a href="gifts/delete/{{$data[$i]["id"]}}">
+                                <button class="button-4" role="button">DELETE</button>
+                            </a>
+                        </div>
+                        <div>
+                            <a href="gifts/edit/{{$data[$i]["id"]}}">
+                                <button class="button-4" role="button">EDIT</button>
+                            </a>
+                        </div>
+                    </td>
+                        </tr>
+                    @endif
+                @endfor
+            @endforeach
+            </tbody>
+        </table>
+    </div>
+</section>
+<x-footer>
+
+</x-footer>
 </body>
 </html>

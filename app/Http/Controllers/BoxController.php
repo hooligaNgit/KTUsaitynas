@@ -7,6 +7,8 @@ use App\Http\Requests\UpdateboxRequest;
 use App\Models\box;
 use App\Http\Resources\BoxResource;
 use App\Http\Requests\BoxesRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class BoxController extends Controller
 {
@@ -15,6 +17,21 @@ class BoxController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function view()
+    {
+        $response = Http::get("http://127.0.0.1:8000/api/boxes");
+
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('box.index',['data' =>$data]);
+    }
+    public function delete(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/boxes/' .+ $request->id;
+        $response = Http::delete($url);
+        return redirect("/boxes");
+    }
     public function index()
     {
         return BoxResource::collection(Box::all());
@@ -25,9 +42,39 @@ class BoxController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function save(Request $request)
+    {
+        $response = Http::post('http://127.0.0.1:8000/api/boxes', [
+            'name' => $request->name,
+            'status' => $request->status,
+            'dispatch_date' => $request->dispatch_date,
+            'delivery_date' => $request->delivery_date
+        ]);
+        return back()->with('success', 'Data has been added');
+    }
+    public function editBox(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/boxes/' .+ $request->id;
+        $response = Http::get($url);
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('box.edit',['data' =>$data]);
+    }
+    public function updateBox(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/boxes/' .+ $request->id;
+        $response = Http::put($url, [
+            'name' => $request->name,
+            'status' => $request->status,
+            'dispatch_date' => $request->dispatch_date,
+            'delivery_date' => $request->delivery_date
+        ]);
+        return redirect("/boxes");
+    }
     public function create()
     {
-        //
+        return view('box.create');
     }
 
     /**

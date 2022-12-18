@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\TypesRequest;
 use App\Models\Type;
 use App\Http\Resources\TypesResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 
 class TypesController extends Controller
 {
@@ -13,6 +15,15 @@ class TypesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function view()
+    {
+        $response = Http::get("http://127.0.0.1:8000/api/types");
+
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('types.index',['data' =>$data]);
+    }
     public function index()
     {
         return TypesResource::collection(Type::all());
@@ -25,9 +36,22 @@ class TypesController extends Controller
      */
     public function create()
     {
-        //
+        return view('types.create');
     }
 
+    public function save(Request $request)
+    {
+        $response = Http::post('http://127.0.0.1:8000/api/types', [
+            'name' => $request->name
+        ]);
+        return back()->with('success', 'Data has been added');
+    }
+    public function delete(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/types/' .+ $request->id;
+        $response = Http::delete($url);
+        return redirect("/types");
+    }
     /**
      * Store a newly created resource in storage.
      *
@@ -40,6 +64,24 @@ class TypesController extends Controller
             'name'=>$request->input('name')
         ]);
         return new TypesResource($type);
+    }
+
+    public function editType(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/types/' .+ $request->id;
+        $response = Http::get($url);
+        if ($response->successful()) {
+            $data = $response->json()["data"];
+        }
+        return view('types.edit',['data' =>$data]);
+    }
+    public function updateType(Request $request)
+    {
+        $url = 'http://127.0.0.1:8000/api/types/' .+ $request->id;
+        $response = Http::put($url, [
+            'name' => $request->name
+        ]);
+        return redirect("/types");
     }
 
     /**
